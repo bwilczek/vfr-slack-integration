@@ -8,7 +8,7 @@ get '/' do
 end
 
 post '/' do
-	content_type 'text/json'
+	content_type 'application/json'
 	# TODO: validate ENV['SLACK_TOKEN'] == params[:token]
 	# TODO: validate params[:text]
 	ret = {
