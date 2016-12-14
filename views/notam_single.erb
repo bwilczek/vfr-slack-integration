@@ -1,0 +1,6 @@
+--------------------------
+
+<%  if notam[:signature] %><%= "#{notam[:signature]}\n" %><% end %>
+<%= "Created at #{notam[:created_at].strftime("%F %H:%M")} by #{notam[:source]}\n" %>
+<%= "_Valid from #{notam[:valid_from].strftime("%F %H:%M (%A)")} to #{notam[:valid_to].strftime("%F %H:%M (%A)")}_\n" %>
+<%= "\n*#{notam[:message]}*\n" %>
