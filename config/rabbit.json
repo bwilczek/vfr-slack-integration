@@ -1,0 +1,10 @@
+{
+  "queue_name": "<%= ENV['VFR_RABBIT_QUEUE_NAME'] || 'vfr-utils' %>",
+  "connection": {
+    "host": "<%= ENV['VFR_RABBIT_HOST'] || '127.0.0.1' %>",
+    "vhost": "<%= ENV['VFR_RABBIT_VHOST'] || '/' %>",
+    "port": <%= ENV['VFR_RABBIT_PORT'] || '5672' %>,
+    "user": "<%= ENV['VFR_RABBIT_USER'] || 'guest' %>",
+    "pass": "<%= ENV['VFR_RABBIT_PASS'] || 'guest' %>"
+  }
+}

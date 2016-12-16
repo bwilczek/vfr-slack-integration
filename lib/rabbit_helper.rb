@@ -1,35 +1,41 @@
 require 'json'
+require 'erb'
 require 'bunny'
 
 module RabbitHelper
-	class << self
+  class << self
 
-		def init
-			# TODO: use configuration
-			@rabbit = Bunny.new
-			@rabbit.start
+    def config
+      return @config unless @config.nil?
+      config_path = File.expand_path("#{File.dirname(__FILE__)}/../config/rabbit.json")
+      @config = JSON.parse(ERB.new(File.read(config_path)).result, symbolize_names: true)
+    end
 
-			@channel = @rabbit.create_channel
-			@queue  = @channel.queue('vfr-utils', :auto_delete => true)
-			@exchange  = @channel.default_exchange
-		end
+    def init
+      @rabbit = Bunny.new config[:connection]
+      @rabbit.start
 
-		def cleanup
-			@rabbit.close
-		end
+      @channel = @rabbit.create_channel
+      @queue  = @channel.queue(config[:queue_name], :auto_delete => true)
+      @exchange  = @channel.default_exchange
+    end
 
-		def publish(task_data)
-			@exchange.publish(JSON.generate(task_data), :routing_key => @queue.name)
-		end
+    def cleanup
+      @rabbit.close
+    end
 
-		def process_message
-			@queue.subscribe(block: true) do |delivery_info, metadata, payload|
-				Thread.new do
-					data = JSON.parse(payload)
-					yield data
-				end
-		  end
-		end
+    def publish(task_data)
+      @exchange.publish(JSON.generate(task_data), :routing_key => @queue.name)
+    end
 
-	end
+    def process_message
+      @queue.subscribe(block: true) do |delivery_info, metadata, payload|
+        Thread.new do
+          data = JSON.parse(payload)
+          yield data
+        end
+      end
+    end
+
+  end
 end
