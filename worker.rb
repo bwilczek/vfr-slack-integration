@@ -19,13 +19,13 @@ begin
         next
       end
 
-    # puts JSON.generate(text: result, mrkdwn: true)
-    # next
-    # TODO: some error handling for the response
     response = Faraday.post do |req|
       req.url data['response_url']
       req.headers['Content-Type'] = 'application/json'
       req.body = JSON.generate(text: result, mrkdwn: true)
+    end
+    unless response.status == 200
+      $stderr.puts "POST to Slack failed. Code: #{response.status}, body: #{response.body}"
     end
   end
 rescue SystemExit, Interrupt
