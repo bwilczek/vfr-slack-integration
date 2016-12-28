@@ -1,5 +1,5 @@
 require 'json'
-require 'vfr-utils'
+require 'vfr_utils'
 require_relative './lib/rabbit_helper'
 
 RabbitHelper.init

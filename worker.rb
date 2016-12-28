@@ -1,5 +1,5 @@
 require 'faraday'
-require 'vfr-utils'
+require 'vfr_utils'
 require_relative './lib/rabbit_helper'
 require_relative './lib/markdown_formatter'
 
