@@ -7,21 +7,28 @@ require_relative './lib/markdown_formatter'
 logger = Logger.new('/tmp/vfr_utils.log')
 logger.level = Logger::DEBUG # Logger::FATAL
 
+logger.info 'Starting the worker'
+
 RabbitHelper.init
 
 begin
   RabbitHelper.process_message do |data|
-    result = case data['operation']
-      when 'notam' then MarkdownFormatter.notam(VfrUtils::NOTAM.get(data['operation_params']))
-      when 'metar'
-        # not implemented yet
-        next
-      when 'taf'
-        # not implemented yet
-        next
-      else
-        next
-      end
+    begin
+      result = case data['operation']
+        when 'notam' then MarkdownFormatter.notam(VfrUtils::NOTAM.get(data['operation_params']))
+        when 'metar'
+          # not implemented yet
+          next
+        when 'taf'
+          # not implemented yet
+          next
+        else
+          next
+        end
+    rescue Exception => e
+      logger.error "An error has occurred while preparing the data: #{e.message}"
+      next
+    end
 
     logger.debug " > Posting #{result.length} bytes to Slack" if debug
 
@@ -37,6 +44,6 @@ begin
 
   end
 rescue SystemExit, Interrupt
-  # puts 'Closing connection...'
+  logger.info 'Closing RabbitMQ connection...'
   RabbitHelper.cleanup
 end
