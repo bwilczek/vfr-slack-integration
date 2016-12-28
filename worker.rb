@@ -10,9 +10,11 @@ logger.level = Logger::DEBUG # Logger::FATAL
 logger.info 'Starting the worker'
 
 RabbitHelper.init
+logger.info 'RabbitMQ connection ready'
 
 begin
   RabbitHelper.process_message do |data|
+    logger.debug "Processing message #{data}"
     begin
       result = case data['operation']
         when 'notam' then MarkdownFormatter.notam(VfrUtils::NOTAM.get(data['operation_params']))
@@ -30,7 +32,7 @@ begin
       next
     end
 
-    logger.debug " > Posting #{result.length} bytes to Slack" if debug
+    logger.debug " > Posting #{result.length} bytes to Slack"
 
     response = Faraday.post do |req|
       req.url data['response_url']
