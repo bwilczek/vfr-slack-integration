@@ -16,7 +16,7 @@ at_exit {
 require 'sinatra'
 
 set :bind, '0.0.0.0'
-ALLOWED_OPERATIONS = ['notam'] # TODO: taf and metar
+ALLOWED_OPERATIONS = ['notam', 'taf', 'metar']
 
 get '/' do
   # handle_request

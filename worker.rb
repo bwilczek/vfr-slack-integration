@@ -24,12 +24,8 @@ begin
     begin
       result = case data['operation']
         when 'notam' then MarkdownFormatter.notam(VfrUtils::NOTAM.get(data['operation_params']))
-        when 'metar'
-          # not implemented yet
-          next
-        when 'taf'
-          # not implemented yet
-          next
+        when 'metar' then MarkdownFormatter.weather(VfrUtils::METAR.get(data['operation_params']))
+        when 'taf' then MarkdownFormatter.weather(VfrUtils::TAF.get(data['operation_params']))
         else
           next
         end
