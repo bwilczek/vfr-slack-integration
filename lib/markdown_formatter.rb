@@ -9,8 +9,8 @@ module MarkdownFormatter
         notams_for_aerodrome.each do |notam|
           ret << "--------------------------\n\n"
           ret << "#{notam[:signature]}\n" if notam[:signature]
-          ret << "\nCreated at #{notam[:created_at].strftime("%F %H:%M")} by #{notam[:source]}\n"
-          ret << "_Valid from #{notam[:valid_from].strftime("%F %H:%M (%A)")} to #{notam[:valid_to].strftime("%F %H:%M (%A)")}_\n"
+          ret << "\nCreated at #{notam[:created_at].strftime("%F %H:%M")} by #{notam[:source]}\n" if notam[:created_at]
+          ret << "_Valid from #{notam[:valid_from].strftime("%F %H:%M (%A)")} to #{notam[:valid_to].strftime("%F %H:%M (%A)")}_\n" if notam[:valid_from]
           ret << "\n*#{notam[:message]}*\n\n"
         end
         ret << "\n"

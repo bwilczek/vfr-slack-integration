@@ -4,8 +4,14 @@ require 'logger'
 require_relative './lib/rabbit_helper'
 require_relative './lib/markdown_formatter'
 
-logger = Logger.new('/tmp/vfr_utils.log')
-logger.level = Logger::DEBUG # Logger::FATAL
+logger = Logger.new('/var/log/vfr_utils.log')
+logger.level = Logger::ERROR
+if ENV['VFR_LOG_LEVEL']
+  begin
+    logger.level = Logger.const_get(ENV['VFR_LOG_LEVEL'].upcase)
+  rescue
+  end
+end
 
 logger.info 'Starting the worker'
 
@@ -28,7 +34,7 @@ begin
           next
         end
     rescue Exception => e
-      logger.error "An error has occurred while preparing the data: #{e.message}"
+      logger.error "Exception: #{e.message}. Request data: #{data}"
       next
     end
 
