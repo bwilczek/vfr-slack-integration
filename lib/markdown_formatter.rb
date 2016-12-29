@@ -21,7 +21,7 @@ module MarkdownFormatter
     def weather(data)
       ret = "\n\n"
       data.each_pair do |icao_code, data_for_aerodrome|
-        ret << "\n=== *#{icao_code}* ==="
+        ret << "\n=== *#{icao_code}* ===\n"
         ret << data_for_aerodrome[:data]
         ret << "\n"
       end
