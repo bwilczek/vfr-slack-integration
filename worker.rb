@@ -4,7 +4,7 @@ require 'logger'
 require_relative './lib/rabbit_helper'
 require_relative './lib/markdown_formatter'
 
-logger = Logger.new('/var/log/vfr_utils.log')
+logger = Logger.new('/var/log/vfr_slack_integration.log')
 logger.level = Logger::ERROR
 if ENV['VFR_LOG_LEVEL']
   begin
